@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Local Problem Reporter</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #16834a;
+            --dark-green: #105c35;
+            --light-green: #e9f8ef;
+            --text: #20372a;
+            --muted: #7b8b80;
+            --border: #e1eae3;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            background: #f2f8f3;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+        }
+
+        /* LEFT SIDE */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 42px 8%;
+            color: white;
+            background:
+                radial-gradient(circle at 10% 90%, #46b77a55, transparent 35%),
+                radial-gradient(circle at 90% 10%, #a2f3bf33, transparent 30%),
+                linear-gradient(145deg, #0c4227, #147545 55%, #218c57);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border: 1px solid #ffffff18;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 400px;
+            height: 400px;
+            right: -170px;
+            top: 20%;
+        }
+
+        .hero::after {
+            width: 300px;
+            height: 300px;
+            right: -110px;
+            top: 28%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            background: #ffffff20;
+            border: 1px solid #ffffff30;
+            font-size: 25px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: #d1ead9;
+            margin-top: 4px;
+        }
+
+        .hero-content {
+            max-width: 520px;
+            position: relative;
+            z-index: 1;
+            padding: 55px 0;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff16;
+            border: 1px solid #ffffff28;
+            border-radius: 30px;
+            padding: 9px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 27px;
+        }
+
+        .eyebrow span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #8af0ac;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(35px, 4vw, 56px);
+            line-height: 1.13;
+            letter-spacing: -2px;
+            margin-bottom: 23px;
+        }
+
+        .hero-content h1 em {
+            color: #a6f1bf;
+            font-style: normal;
+        }
+
+        .hero-content>p {
+            color: #d4e9da;
+            line-height: 1.9;
+            font-size: 14px;
+            max-width: 400px;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 17px;
+            margin-top: 35px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 13px;
+            color: #effbf2;
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            background: #ffffff16;
+            border: 1px solid #ffffff22;
+            border-radius: 12px;
+            font-size: 17px;
+        }
+
+        .hero-footer {
+            position: relative;
+            z-index: 1;
+            color: #c3e2ce;
+            font-size: 11px;
+        }
+
+        /* RIGHT SIDE */
+
+        .form-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 24px;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .mobile-brand {
+            display: none;
+        }
+
+        .top-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .top-link a,
+        .login-link a {
+            text-decoration: none;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .top-link a:hover,
+        .login-link a:hover {
+            color: var(--dark-green);
+            text-decoration: underline;
+        }
+
+        .form-heading {
+            margin-bottom: 25px;
+        }
+
+        .form-heading .small-label {
+            display: block;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .form-heading h2 {
+            font-size: 32px;
+            letter-spacing: -1.2px;
+            margin-bottom: 10px;
+        }
+
+        .form-heading p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--muted);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 17px 14px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #34483a;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--border);
+            background: #fbfdfb;
+            border-radius: 11px;
+            padding: 0 42px 0 40px;
+            font-family: inherit;
+            font-size: 12px;
+            color: var(--text);
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .input-wrap input::placeholder {
+            color: #a5b0a8;
+        }
+
+        .input-wrap input:hover {
+            border-color: #b7d5c0;
+        }
+
+        .input-wrap input:focus {
+            background: white;
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px #16834a12;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        .password-toggle:hover {
+            background: #e9f8ef;
+            border-radius: 6px;
+        }
+
+        .password-hint {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 7px;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin: 21px 0;
+            font-size: 11px;
+            color: #647468;
+            line-height: 1.7;
+        }
+
+        .terms input {
+            margin-top: 3px;
+            accent-color: var(--green);
+            flex-shrink: 0;
+        }
+
+        .terms a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 51px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(110deg, #16834a, #239b5b);
+            color: white;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 7px 18px #16834a25;
+            transition: 0.2s ease;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px #16834a35;
+        }
+
+        .register-button:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #fff0f0;
+            color: #b42318;
+            border: 1px solid #ffd5d5;
+            font-size: 12px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .success {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #eaf9ef;
+            color: #166534;
+            border: 1px solid #c8eed4;
+            font-size: 12px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 23px;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 25px;
+            font-size: 10px;
+            color: #89978c;
+        }
+
+        .security-note span {
+            color: var(--green);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 0.8fr 1.2fr;
+            }
+
+            .hero {
+                padding: 32px 7%;
+            }
+
+            .hero-content h1 {
+                font-size: 38px;
+            }
+
+            .form-side {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .page {
+                display: block;
+            }
+
+            .hero {
+                display: none;
+            }
+
+            .form-side {
+                min-height: 100vh;
+                padding: 25px 18px;
+                align-items: flex-start;
+            }
+
+            .register-card {
+                max-width: 460px;
+                margin: 0 auto;
+            }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 28px;
+            }
+
+            .mobile-brand .brand-icon {
+                background: #e0f4e6;
+                color: var(--green);
+            }
+
+            .mobile-brand .brand-name {
+                color: var(--dark-green);
+                font-size: 15px;
+            }
+
+            .mobile-brand .brand-subtitle {
+                color: var(--muted);
+            }
+
+            .top-link {
+                margin-bottom: 25px;
+            }
+
+            .form-heading h2 {
+                font-size: 29px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-heading h2 {
+                font-size: 26px;
+            }
+
+            .input-wrap input {
+                height: 47px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="page"><!-- LEFT WELCOME PANEL -->
+
+        <aside class="hero">
+
+            <div class="brand">
+                <div class="brand-icon">🌿</div>
+                <div>
+                    <div class="brand-name">Local Problem Reporter</div>
+                    <div class="brand-subtitle">Together for a better community</div>
+                </div>
+            </div>
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    <span></span>
+                    YOUR COMMUNITY. YOUR VOICE.
+                </div>
+
+                <h1>
+                    Make Your<br>
+                    Neighborhood<br>
+                    <em>A Better Place.</em>
+                </h1>
+
+                <p>
+                    Report local problems, raise your voice, and help create
+                    cleaner, safer, and better communities for everyone.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature">
+                        <div class="feature-icon">📍</div>
+                        <div>Report problems in your local area</div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📋</div>
+                        <div>Keep track of your complaint status</div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🤝</div>
+                        <div>Be a part of positive change</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="hero-footer">
+                © 2026 Local Problem Reporter · Building better communities
+            </div>
+
+        </aside>
+
+
+        <!-- REGISTRATION FORM -->
+
+        <main class="form-side">
+
+            <div class="register-card">
+
+                <div class="mobile-brand">
+                    <div class="brand-icon">🌿</div>
+                    <div>
+                        <div class="brand-name">Local Problem Reporter</div>
+                        <div class="brand-subtitle">Your community, your voice</div>
+                    </div>
+                </div>
+
+                <div class="top-link">
+                    <span>HOME / CREATE ACCOUNT</span>
+                    <a href="/">← Back to Home</a>
+                </div>
+
+                <div class="form-heading">
+                    <span class="small-label">GET STARTED FREE</span>
+                    <h2>Create your account ✨</h2>
+                    <p>Enter your details below to join your community.</p>
+                </div>
+
+                {% if error %}
+                <div class="error">⚠️ {{ error }}</div>
+                {% endif %}
+
+                {% if success %}
+                <div class="success">✓ {{ success }}</div>
+                {% endif %}
+
+                <form action="{{ url_for('register') }}" method="POST">
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="full_name">Full Name</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name"
+                                    maxlength="100" autocomplete="name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile">Mobile Number</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">📱</span>
+                                <input type="tel" id="mobile" name="mobile" placeholder="10-digit number"
+                                    pattern="[0-9]{10}" maxlength="10" inputmode="numeric" autocomplete="tel" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">✉️</span>
+                                <input type="email" id="email" name="email" placeholder="name@example.com"
+                                    maxlength="254" autocomplete="email" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="username">Choose Username</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">🪪</span>
+                                <input type="text" id="username" name="username" placeholder="Create a unique username"
+                                    minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+"
+                                    title="Use only English letters, numbers and underscores." autocomplete="username"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">🔒</span>
+                                <input type="password" id="password" name="password" placeholder="Minimum 8 characters"
+                                    minlength="8" autocomplete="new-password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('password', this)"
+                                    aria-label="Show password">👁️</button>
+                            </div>
+                            <p class="password-hint">Use at least 8 characters.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">🔐</span>
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    placeholder="Repeat password" minlength="8" autocomplete="new-password" required>
+                                <button type="button" class="password-toggle"
+                                    onclick="togglePassword('confirm_password', this)"
+                                    aria-label="Show confirm password">👁️</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <label class="terms">
+                        <input type="checkbox" name="terms" value="accepted" required>
+                        <span>
+                            I confirm that the information provided is correct
+                            and agree to use this platform responsibly.
+                        </span>
+                    </label>
+
+                    <button type="submit" class="register-button">
+                        Create My Account <span>→</span>
+                    </button>
+
+                </form>
+
+                <div class="login-link">
+                    Already have an account?
+                    <a href="{{ url_for('user_login') }}">Sign in here</a>
+                </div>
+
+                <div class="security-note">
+                    <span>🔒</span>
+                    Your account details should be handled securely.
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+    <script>
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                button.textContent = "🙈";
+                button.setAttribute("aria-label", "Hide password");
+            } else {
+                input.type = "password";
+                button.textContent = "👁️";
+                button.setAttribute("aria-label", "Show password");
+            }
+        }
+
+        const registrationForm = document.querySelector("form");
+
+        registrationForm.addEventListener("submit", function (event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword =
+                document.getElementById("confirm_password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match. Please try again.");
+                document.getElementById("confirm_password").focus();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Local Problem Reporter</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #092e20, #126b42, #36a568);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            overflow-x: hidden;
+        }
+
+        /* Background effects */
+        .circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .circle-one {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.07);
+            top: -120px;
+            left: -100px;
+        }
+
+        .circle-two {
+            width: 500px;
+            height: 500px;
+            background: rgba(139, 255, 177, 0.09);
+            right: -150px;
+            bottom: -180px;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1050px;
+            min-height: 610px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+            animation: appear 0.7s ease;
+        }
+
+        /* Left panel */
+        .left-panel {
+            background: linear-gradient(145deg, #10452d, #17834d);
+            padding: 45px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            right: -150px;
+            top: 100px;
+            box-shadow: 0 0 0 35px rgba(255, 255, 255, 0.03),
+                0 0 0 70px rgba(255, 255, 255, 0.02);
+        }
+
+        .brand {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 17px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: grid;
+            place-items: center;
+            font-size: 29px;
+        }
+
+        .brand h2 {
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        .brand p {
+            color: #c9f4d7;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+            margin: 45px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 9px 14px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.17);
+            border-radius: 25px;
+            font-size: 11px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: #9df4b8;
+        }
+
+        .hero>p {
+            color: #d5efdd;
+            font-size: 13px;
+            line-height: 2;
+            max-width: 350px;
+        }
+
+        /* Feature cards */
+        .features {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .feature {
+            padding: 16px 10px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 15px;
+        }
+
+        .feature-icon {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .feature p {
+            font-size: 9px;
+            line-height: 1.6;
+            color: #d1ead9;
+        }
+
+        .left-footer {
+            position: relative;
+            z-index: 1;
+            color: #c3e6ce;
+            font-size: 10px;
+            margin-top: 28px;
+        }
+
+        /* Right login panel */
+        .right-panel {
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #e6f9eb, #c9f0d4);
+            display: grid;
+            place-items: center;
+            font-size: 32px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 22px rgba(34, 139, 75, 0.10);
+        }
+
+        .right-panel h2 {
+            font-size: 30px;
+            color: #153b27;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #839087;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #294936;
+            margin-bottom: 9px;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            height: 55px;
+            padding: 0 15px;
+            gap: 12px;
+            background: #f8fbf8;
+            border: 1px solid #dfe9e0;
+            border-radius: 13px;
+            transition: 0.3s;
+        }
+
+        .input-box:focus-within {
+            background: white;
+            border-color: #239653;
+            box-shadow: 0 0 0 4px rgba(35, 150, 83, 0.09);
+        }
+
+        .input-icon {
+            font-size: 19px;
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #24432f;
+            font-size: 12px;
+        }
+
+        input::placeholder {
+            color: #a0aca3;
+        }
+
+        .show-btn {
+            border: none;
+            background: transparent;
+            color: #21824a;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .error {
+            padding: 12px;
+            background: #fff0f0;
+            border: 1px solid #ffd9d9;
+            color: #bb2727;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-bottom: 18px;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 55px;
+            margin-top: 7px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(110deg, #146a3b, #28a15b);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(35, 145, 77, 0.22);
+            transition: 0.25s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 28px rgba(35, 145, 77, 0.3);
+        }
+
+        .secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #8a978d;
+            font-size: 10px;
+            margin-top: 24px;
+        }
+
+        .bottom {
+            text-align: center;
+            color: #94a096;
+            font-size: 10px;
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        .bottom strong {
+            color: #267b47;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 800px) {
+            body {
+                padding: 16px;
+            }
+
+            .wrapper {
+                max-width: 500px;
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 28px;
+            }
+
+            .hero {
+                margin: 35px 0 25px;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .right-panel {
+                padding: 32px 26px;
+            }
+
+            .right-panel h2 {
+                font-size: 27px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .features {
+                gap: 6px;
+            }
+
+            .feature {
+                padding: 12px 7px;
+            }
+
+            .left-panel {
+                padding: 22px;
+            }
+
+            .right-panel {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="circle circle-one"></div>
+    <div class="circle circle-two"></div>
+
+    <div class="wrapper">
+
+        <section class="left-panel">
+
+            <div class="brand">
+                <div class="brand-icon">🏙️</div>
+                <div>
+                    <h2>Local Problem Reporter</h2>
+                    <p>SMART CITY · BETTER COMMUNITY</p>
+                </div>
+            </div>
+
+            <div class="hero">
+                <div class="tag">✦ ADMINISTRATION PORTAL</div>
+
+                <h1>
+                    Make Your City<br>
+                    <span>Better.</span>
+                </h1>
+
+                <p>
+                    Manage community problems in one place.
+                    Review reports, monitor their progress and
+                    help build a cleaner, safer neighbourhood.
+                </p>
+            </div>
+
+            <div>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">📋</div>
+                        <h3>Manage</h3>
+                        <p>Review submitted reports</p>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Track</h3>
+                        <p>Monitor problem status</p>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🌱</div>
+                        <h3>Improve</h3>
+                        <p>Create positive change</p>
+                    </div>
+                </div>
+
+                <div class="left-footer">
+                    © 2026 Local Problem Reporter. All rights reserved.
+                </div>
+            </div>
+
+        </section>
+
+        <section class="right-panel">
+
+            <div class="login-icon">🔐</div>
+
+            <h2>Welcome Back!</h2>
+
+            <p class="subtitle">
+                Sign in to your admin account to continue
+                to your management dashboard.
+            </p>
+
+            {% if error %}
+            <div class="error" role="alert">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+
+            <form action="{{ url_for('admin_login') }}" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Admin Username</label>
+
+                    <div class="input-box">
+                        <span class="input-icon">👤</span>
+
+                        <input type="text" id="username" name="username" placeholder="Enter your username"
+                            autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <div class="input-box">
+                        <span class="input-icon">🔑</span>
+
+                        <input type="password" id="password" name="password" placeholder="Enter your password"
+                            autocomplete="current-password" required>
+
+                        <button class="show-btn" type="button" id="showPassword">SHOW</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Sign In to Dashboard &nbsp; →
+                </button>
+
+            </form>
+
+            <div class="secure">
+                🛡️ Secure access for authorized administrators
+            </div>
+
+            <div class="bottom">
+                Built with care for your community 🌍<br>
+                <strong>Local Problem Reporter</strong>
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        const password = document.getElementById("password");
+        const showButton = document.getElementById("showPassword");
+
+        showButton.addEventListener("click", function () {
+            if (password.type === "password") {
+                password.type = "text";
+                showButton.textContent = "HIDE";
+            } else {
+                password.type = "password";
+                showButton.textContent = "SHOW";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

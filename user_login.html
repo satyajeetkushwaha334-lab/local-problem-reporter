@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login | Local Problem Reporter</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #168447;
+            --dark-green: #0b5730;
+            --light-green: #e8f7ed;
+            --text: #193326;
+            --muted: #7a8a80;
+            --border: #e3ebe5;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            background: #f3f8f4;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* LEFT PANEL */
+
+        .left-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 42px 8%;
+            color: white;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 15% 15%, #42b875 0, transparent 30%),
+                linear-gradient(145deg, #0b5730, #168447 65%, #219653);
+        }
+
+        .left-panel::before,
+        .left-panel::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .left-panel::before {
+            width: 440px;
+            height: 440px;
+            right: -170px;
+            top: 15%;
+        }
+
+        .left-panel::after {
+            width: 300px;
+            height: 300px;
+            right: -100px;
+            top: 25%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 10px;
+            margin-top: 4px;
+            opacity: 0.8;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+            max-width: 520px;
+            margin: 55px 0;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 9px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow span {
+            width: 7px;
+            height: 7px;
+            background: #b7ffc9;
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 4vw, 54px);
+            line-height: 1.17;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 em {
+            color: #b8ffce;
+            font-style: normal;
+        }
+
+        .hero p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.82);
+            max-width: 420px;
+        }
+
+        .feature-list {
+            margin-top: 35px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.93);
+        }
+
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.14);
+            font-size: 16px;
+        }
+
+        .left-footer {
+            position: relative;
+            z-index: 1;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+        }
+
+        /* RIGHT PANEL */
+
+        .right-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 25px;
+            background:
+                radial-gradient(circle at 90% 5%, #e1f5e7 0, transparent 27%),
+                #fbfdfb;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 410px;
+            animation: appear 0.6s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-brand {
+            display: none;
+        }
+
+        .welcome-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 29px;
+            background: var(--light-green);
+            margin-bottom: 25px;
+            box-shadow: 0 7px 18px rgba(22, 132, 71, 0.08);
+        }
+
+        .login-card h2 {
+            font-size: 32px;
+            letter-spacing: -1.1px;
+            margin-bottom: 10px;
+            color: #173b27;
+        }
+
+        .description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 27px;
+        }
+
+        .error {
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            background: #fff0f0;
+            border: 1px solid #ffd5d5;
+            color: #b42318;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .success {
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            background: #eaf8ee;
+            border: 1px solid #c9ebd2;
+            color: #176b36;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 9px;
+            color: #304a39;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #7e9585;
+            pointer-events: none;
+        }
+
+        .field input {
+            width: 100%;
+            height: 53px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: white;
+            padding: 0 46px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: 0.25s;
+        }
+
+        .field input::placeholder {
+            color: #a8b4ac;
+        }
+
+        .field input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px rgba(22, 132, 71, 0.09);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #718578;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 54px;
+            margin-top: 7px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(100deg, #168447, #0e6b37);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(22, 132, 71, 0.20);
+            transition: 0.25s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 11px 22px rgba(22, 132, 71, 0.28);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin: 25px 0;
+            color: #9aa79e;
+            font-size: 11px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            height: 1px;
+            background: #e8eee9;
+            flex: 1;
+        }
+
+        .register-text {
+            text-align: center;
+            font-size: 12px;
+            color: #77867c;
+        }
+
+        .register-text a {
+            color: var(--green);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #74857a;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: var(--green);
+        }
+
+        .secure-note {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            color: #8b9a90;
+        }
+
+        @media (max-width: 850px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                display: none;
+            }
+
+            .right-panel {
+                min-height: 100vh;
+                padding: 35px 22px;
+            }
+
+            .login-card {
+                max-width: 430px;
+            }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 35px;
+            }
+
+            .mobile-brand-icon {
+                width: 43px;
+                height: 43px;
+                border-radius: 13px;
+                background: #e1f5e7;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 23px;
+            }
+
+            .mobile-brand-name {
+                color: #155b32;
+                font-size: 15px;
+                font-weight: 800;
+            }
+
+            .welcome-icon {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .right-panel {
+                padding: 28px 18px;
+            }
+
+            .login-card h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="page"><!-- LEFT SIDE -->
+        <section class="left-panel">
+
+            <div class="brand">
+                <div class="brand-icon">🌿</div>
+                <div>
+                    <div class="brand-name">Local Problem Reporter</div>
+                    <div class="brand-tagline">Together for a better locality</div>
+                </div>
+            </div>
+
+            <div class="hero">
+
+                <div class="eyebrow">
+                    <span></span>
+                    BUILD A BETTER COMMUNITY
+                </div>
+
+                <h1>
+                    Your voice.<br>
+                    Your locality.<br>
+                    <em>Your impact.</em>
+                </h1>
+
+                <p>
+                    Report local problems, share your concerns
+                    and help make your neighbourhood cleaner,
+                    safer and better for everyone.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature">
+                        <div class="feature-icon">📍</div>
+                        <span>Report problems in your locality</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📷</div>
+                        <span>Upload photos of local issues</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <span>Track your complaint status</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="left-footer">
+                © 2026 Local Problem Reporter · Community First
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <main class="right-panel">
+
+            <div class="login-card">
+
+                <div class="mobile-brand">
+                    <div class="mobile-brand-icon">🌿</div>
+                    <div class="mobile-brand-name">
+                        Local Problem Reporter
+                    </div>
+                </div>
+
+                <div class="welcome-icon">👋</div>
+
+                <h2>Welcome back!</h2>
+
+                <p class="description">
+                    Login to your account and continue making
+                    a positive difference in your community.
+                </p>
+
+                {% if error %}
+                <div class="error">{{ error }}</div>
+                {% endif %}
+
+                {% if registered %}
+                <div class="success">
+                    ✓ Your account has been created successfully.
+                    Please login to continue.
+                </div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('user_login') }}">
+
+                    <div class="field">
+                        <label for="username">USERNAME</label>
+
+                        <div class="input-wrap">
+                            <span class="input-icon">👤</span>
+
+                            <input type="text" id="username" name="username" placeholder="Enter your username"
+                                autocomplete="username" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">PASSWORD</label>
+
+                        <div class="input-wrap">
+                            <span class="input-icon">🔒</span>
+
+                            <input type="password" id="password" name="password" placeholder="Enter your password"
+                                autocomplete="current-password" required>
+
+                            <button type="button" class="password-toggle" onclick="togglePassword()" id="toggleButton">
+                                SHOW
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-button">
+                        Login to Your Account &nbsp; →
+                    </button>
+
+                </form>
+
+                <div class="divider">NEW TO OUR PLATFORM?</div>
+
+                <p class="register-text">
+                    Don't have an account?
+                    <a href="{{ url_for('register') }}">
+                        Create Account
+                    </a>
+                </p>
+
+                <a href="{{ url_for('home') }}" class="home-link">
+                    ← Back to Home
+                </a>
+
+                <div class="secure-note">
+                    🔒 Your account login is protected
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+    <script>
+        function togglePassword() {
+            const password = document.getElementById("password");
+            const button = document.getElementById("toggleButton");
+
+            if (password.type === "password") {
+                password.type = "text";
+                button.textContent = "HIDE";
+            } else {
+                password.type = "password";
+                button.textContent = "SHOW";
+            }
+        }
+    </script>
+</body>
+
+</html>

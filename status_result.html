@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Status | Local Problem Reporter</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e9f8ee, #f7fbf8, #e3f3e8);
+            color: #20352a;
+            min-height: 100vh;
+            padding: 25px 16px;
+        }
+
+        /* Navigation */
+        nav {
+            max-width: 1100px;
+            margin: 0 auto 35px;
+            padding: 18px 25px;
+            background: white;
+            border: 1px solid #e5eee7;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px #164b2910;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            color: #167442;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .nav-link {
+            color: #167442;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 10px 15px;
+            border-radius: 9px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #e9f8ee;
+        }
+
+        /* Main layout */
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            animation: appear 0.7s ease;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .heading-icon {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #c9f3d5, #e9faee);
+            border: 1px solid #c4e9cf;
+            border-radius: 25px;
+            font-size: 42px;
+            box-shadow: 0 10px 25px #16744215;
+        }
+
+        .eyebrow {
+            color: #16834a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 43px);
+            margin: 10px 0;
+            color: #153d28;
+        }
+
+        .subtitle {
+            color: #68796e;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Result card */
+        .result-card {
+            background: white;
+            border: 1px solid #e2ece5;
+            border-radius: 23px;
+            overflow: hidden;
+            box-shadow: 0 18px 50px #164b2910;
+        }
+
+        .card-header {
+            padding: 25px;
+            background: linear-gradient(120deg, #176b3d, #218b50);
+            color: white;
+        }
+
+        .card-header small {
+            display: block;
+            color: #d8f4e1;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-header h2 {
+            font-size: 23px;
+            overflow-wrap: anywhere;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .detail {
+            min-width: 0;
+            padding: 19px;
+            background: #f7faf8;
+            border: 1px solid #e7eee9;
+            border-radius: 14px;
+            transition: 0.25s ease;
+        }
+
+        .detail:hover {
+            transform: translateY(-3px);
+            border-color: #b8dfc4;
+            box-shadow: 0 8px 20px #1674420c;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 9px;
+            color: #758278;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .detail-value {
+            display: block;
+            color: #263d2e;
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .status-section {
+            margin-top: 22px;
+            padding: 22px;
+            background: #f7faf8;
+            border: 1px solid #e7eee9;
+            border-radius: 15px;
+        }
+
+        .status-title {
+            display: block;
+            color: #68796e;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .pending {
+            color: #946200;
+            background: #fff2c9;
+        }
+
+        .in-progress {
+            color: #145fbd;
+            background: #e1efff;
+        }
+
+        .resolved {
+            color: #167442;
+            background: #d8f7e2;
+        }
+
+        .unknown {
+            color: #526357;
+            background: #e9efeb;
+        }
+
+        .status-note {
+            margin-top: 13px;
+            color: #758278;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 18px;
+            border-radius: 11px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 800;
+            transition: 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #218b50, #126537);
+            color: white;
+            box-shadow: 0 7px 18px #16744225;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 11px 25px #16744235;
+        }
+
+        .btn-secondary {
+            color: #167442;
+            background: white;
+            border: 1px solid #b9ddc4;
+        }
+
+        .btn-secondary:hover {
+            background: #eaf8ee;
+            transform: translateY(-3px);
+        }
+
+        /* Error message */
+        .error-card {
+            padding: 30px 24px;
+            text-align: center;
+            background: white;
+            border: 1px solid #f4d7d4;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px #8d261010;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .error-card h2 {
+            color: #b42318;
+            margin-bottom: 12px;
+        }
+
+        .error-card p {
+            color: #68796e;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1100px;
+            margin: 45px auto 0;
+            padding: 22px 10px;
+            text-align: center;
+            color: #77857b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 550px) {
+            body {
+                padding: 14px 12px;
+            }
+
+            nav {
+                padding: 16px;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .nav-link {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .heading {
+                margin-bottom: 23px;
+            }
+
+            .heading-icon {
+                width: 72px;
+                height: 72px;
+                font-size: 35px;
+            }
+
+            .card-header,
+            .card-body {
+                padding: 20px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .detail {
+                padding: 16px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">📍 Local Problem Reporter</div>
+        <a href="{{ url_for('home') }}" class="nav-link">← Home</a>
+    </nav>
+
+    <main class="container">
+
+        <section class="heading">
+            <div class="heading-icon">📋</div>
+            <div class="eyebrow">Complaint Tracking</div>
+            <h1>Track Your Complaint</h1>
+            <p class="subtitle">
+                Stay updated and see the latest status of your
+                reported community problem.
+            </p>
+        </section>
+
+        {% if report %}
+
+        <section class="result-card">
+
+            <div class="card-header">
+                <small>Complaint #{{ report['id'] }}</small>
+                <h2>{{ report['title'] }}</h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="details-grid">
+
+                    <div class="detail">
+                        <span class="detail-label">🆔 Complaint ID</span>
+                        <span class="detail-value">
+                            #{{ report['id'] }}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">📂 Category</span>
+                        <span class="detail-value">
+                            {{ report['category'] }}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">📍 Location</span>
+                        <span class="detail-value">
+                            {{ report['location'] }}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">📊 Current Status</span>
+
+                        {% set current_status = report['status'] or 'Pending' %}
+
+                        {% if current_status == 'Pending' %}
+                        <span class="status-badge pending">
+                            Pending
+                        </span>
+                        {% elif current_status == 'In Progress' %}
+                        <span class="status-badge in-progress">
+                            In Progress
+                        </span>
+                        {% elif current_status == 'Resolved' %}
+                        <span class="status-badge resolved">
+                            Resolved
+                        </span>
+                        {% else %}
+                        <span class="status-badge unknown">
+                            {{ current_status }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="status-section">
+                    <span class="status-title">Complaint Update</span>
+
+                    {% if current_status == 'Pending' %}
+                    <p class="status-note">
+                        Your complaint has been received and is
+                        waiting for action from the concerned team.
+                    </p>
+                    {% elif current_status == 'In Progress' %}
+                    <p class="status-note">
+                        Your complaint is currently being worked on.
+                        Please check again later for further updates.
+                    </p>
+                    {% elif current_status == 'Resolved' %}
+                    <p class="status-note">
+                        This complaint has been marked as resolved.
+                        Thank you for helping improve your community!
+                    </p>
+                    {% else %}
+                    <p class="status-note">
+                        The latest status is shown above.
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="actions">
+                    <a href="{{ url_for('status_page') }}" class="btn btn-primary">
+                        🔎 Track Another
+                    </a>
+
+                    <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                        🏠 Back to Home
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        {% elif error %}
+
+        <section class="error-card">
+            <div class="error-icon">🔍</div>
+            <h2>Complaint Not Found</h2>
+            <p>{{ error }}</p>
+
+            <div class="actions">
+                <a href="{{ url_for('status_page') }}" class="btn btn-primary">
+                    Try Again
+                </a>
+
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                    Back to Home
+                </a>
+            </div>
+        </section>
+
+        {% endif %}
+
+    </main>
+
+    <footer>
+        © 2026 Local Problem Reporter<br>
+        Together for a cleaner, safer and better community 🌿
+    </footer>
+
+</body>
+
+</html>

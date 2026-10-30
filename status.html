@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Complaint Status</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            margin: 0;
+            padding: 20px;
+            color: #20352a;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 80px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #00000012;
+            text-align: center;
+        }
+
+        h1 {
+            color: #167442;
+        }
+
+        p {
+            color: #627166;
+            line-height: 1.6;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button,
+        .home-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 13px;
+            background: #167442;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover,
+        .home-btn:hover {
+            background: #105c33;
+        }
+
+        .home-btn {
+            margin-top: 12px;
+            background: white;
+            color: #167442;
+            border: 1px solid #167442;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔎 Check Complaint Status</h1>
+
+        <p>
+            Enter your Complaint ID to check the current
+            status of your reported problem.
+        </p>
+
+        <form action="{{ url_for('check_status') }}" method="POST">
+            <input type="number" name="complaint_id" placeholder="Enter Complaint ID" min="1" required>
+
+            <button type="submit">Check Status</button>
+        </form>
+
+        <a href="{{ url_for('home') }}" class="home-btn">
+            ← Back to Home
+        </a>
+    </div>
+</body>
+
+</html>

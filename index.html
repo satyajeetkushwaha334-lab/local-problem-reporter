@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Problem Reporter</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            color: #20352a;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 7%;
+            background: white;
+            box-shadow: 0 3px 15px #00000010;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #167442;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #34483b;
+            margin-left: 12px;
+            display: inline-block;
+        }
+
+        .login {
+            background: #167442;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+        }
+
+        .admin-login {
+            background: #263c32;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 35px;
+            padding: 80px 7%;
+            background: linear-gradient(120deg, #e8f8ed, white);
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #d5f4df;
+            color: #167442;
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1.15;
+            margin: 25px 0;
+        }
+
+        h1 span {
+            color: #16834a;
+        }
+
+        .hero p {
+            color: #627166;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .buttons {
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px 8px 5px 0;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .primary {
+            background: #167442;
+            color: white;
+        }
+
+        .secondary {
+            border: 1px solid #167442;
+            color: #167442;
+            background: white;
+        }
+
+        .status-btn {
+            color: white;
+            background: linear-gradient(135deg, #248d50, #075c32);
+            border: 1px solid #16834a;
+            box-shadow: 0 7px 18px #16744225;
+        }
+
+        .status-btn:hover {
+            background: linear-gradient(135deg, #176b3d, #064524);
+            box-shadow: 0 10px 22px #16744235;
+        }
+
+        .city {
+            flex: 0 1 420px;
+            min-height: 310px;
+            border-radius: 28px;
+            background: linear-gradient(145deg, #c9efd4, #e4f8e9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 15px 40px #16744218;
+        }
+
+        .city-icon {
+            font-size: 90px;
+            margin-bottom: 15px;
+        }
+
+        .city h2 {
+            color: #176b3d;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 35px 7%;
+        }
+
+        .stat {
+            background: white;
+            padding: 28px 18px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 20px #00000008;
+        }
+
+        .stat .icon {
+            font-size: 35px;
+        }
+
+        .stat h3 {
+            margin: 12px 0 8px;
+            color: #167442;
+        }
+
+        .stat p {
+            color: #68766c;
+            line-height: 1.6;
+        }
+
+        .categories {
+            padding: 55px 7%;
+            text-align: center;
+        }
+
+        .categories h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #68766c;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px 15px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px #00000008;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px #16744218;
+        }
+
+        .card .icon {
+            font-size: 43px;
+            margin-bottom: 15px;
+        }
+
+        .cta {
+            margin: 20px 7% 60px;
+            padding: 45px 20px;
+            border-radius: 22px;
+            background: #176b3d;
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 30px;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            color: #68766c;
+        }
+
+        @media (max-width: 800px) {
+            .hero {
+                flex-direction: column;
+                padding: 50px 6%;
+            }
+
+            .city {
+                width: 100%;
+                flex-basis: auto;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 6px;
+            }
+
+            nav div:last-child {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons .btn {
+                display: block;
+                text-align: center;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">📍 Local Problem Reporter</div>
+
+        <div>
+            <a href="{{ url_for('home') }}">Home</a>
+
+            <a href="#categories">Problems</a>
+
+            <a href="#about">About</a>
+
+            <a href="{{ url_for('status_page') }}">🔎 Track Status</a>
+
+            <!-- User Login Button -->
+            <a href="{{ url_for('user_login') }}" class="login">
+                👤 User Login
+            </a>
+
+            <!-- Admin Login Button -->
+            <a href="{{ url_for('admin_login') }}" class="admin-login">
+                🔐 Admin Login
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <span class="tag">BUILD A BETTER COMMUNITY</span>
+
+            <h1>Let's Make Our City <span>Better.</span></h1>
+
+            <p>
+                Spot a problem? Report it in seconds.
+                Help make your neighbourhood cleaner, safer
+                and brighter. Every report can make a difference!
+            </p>
+
+            <div class="buttons">
+
+                <a href="{{ url_for('user_login') }}" class="btn primary">
+                    👤 User Login & Report
+                </a>
+
+                <a href="{{ url_for('reports') }}" class="btn secondary">
+                    Explore Reports →
+                </a>
+
+                <a href="{{ url_for('status_page') }}" class="btn status-btn">
+                    🔎 Check Complaint Status →
+                </a>
+
+            </div>
+        </div>
+
+        <div class="city">
+
+            <div class="city-icon">🏙️</div>
+
+            <h2>Your City, Your Responsibility</h2>
+
+            <p>Small actions. Big changes.</p>
+
+            <div style="font-size: 40px; margin-top: 18px;">
+                🌳 🚦 🏡 💧
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="icon">📋</div>
+            <h3>Report Problems</h3>
+            <p>Help identify issues in your area.</p>
+        </div>
+
+        <div class="stat">
+            <div class="icon">✅</div>
+            <h3>Track Progress</h3>
+            <p>Follow the status of reported issues.</p>
+        </div>
+
+        <div class="stat">
+            <div class="icon">🌱</div>
+            <h3>Improve Your City</h3>
+            <p>Work towards a cleaner community.</p>
+        </div>
+
+    </section>
+
+    <section class="categories" id="categories">
+
+        <h2>What Needs Attention?</h2>
+
+        <p class="subtitle">
+            Choose a category to help improve your local area.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="icon">🛣️</div>
+                <h3>Road Damage</h3>
+            </div>
+
+            <div class="card">
+                <div class="icon">🗑️</div>
+                <h3>Garbage Problem</h3>
+            </div>
+
+            <div class="card">
+                <div class="icon">💡</div>
+                <h3>Street Lights</h3>
+            </div>
+
+            <div class="card">
+                <div class="icon">💧</div>
+                <h3>Water Leakage</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="cta" id="about">
+
+        <h2>Be the Change Your City Needs!</h2>
+
+        <p>
+            See a local problem? Don't ignore it.
+            Report it and help your community take action.
+        </p>
+
+        <a href="{{ url_for('user_login') }}" class="btn secondary">
+            👤 Login to Report →
+        </a>
+
+        <a href="{{ url_for('status_page') }}" class="btn secondary">
+            🔎 Track My Complaint
+        </a>
+
+    </section>
+
+    <footer>
+        © 2026 Local Problem Reporter | Made for a Better Community
+    </footer>
+
+</body>
+
+</html>

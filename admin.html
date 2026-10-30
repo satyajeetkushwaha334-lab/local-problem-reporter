@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Local Problem Reporter</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f6f3;
+            color: #26352b;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #14532d, #2e8b57);
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .navbar h2 {
+            font-size: 22px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-actions a,
+        .logout-button {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #ffffff90;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .nav-actions a {
+            background: transparent;
+        }
+
+        .nav-actions a:hover {
+            background: #ffffff20;
+        }
+
+        .logout-button {
+            background: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+        .logout-button:hover {
+            background: #991b1b;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            color: #176b3a;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .heading p {
+            color: #718078;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 23px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px #00000008;
+            border-left: 5px solid #2e8b57;
+        }
+
+        .stat-card span {
+            font-size: 14px;
+            color: #718078;
+        }
+
+        .stat-card h2 {
+            font-size: 32px;
+            margin-top: 10px;
+            color: #176b3a;
+        }
+
+        .section {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px #00000008;
+        }
+
+        .section h2 {
+            color: #176b3a;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1350px;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #edf1ed;
+            text-align: left;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #e9f5ec;
+            color: #176b3a;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background: #f8fbf8;
+        }
+
+        .report-photo {
+            width: 75px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .reporter-name {
+            font-weight: bold;
+            color: #176b3a;
+        }
+
+        .reporter-mobile {
+            white-space: nowrap;
+        }
+
+        .not-available {
+            color: #89948c;
+            font-style: italic;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #fff0d4;
+            color: #956000;
+            white-space: nowrap;
+        }
+
+        .status.resolved {
+            background: #ddf6e5;
+            color: #18743b;
+        }
+
+        .status.in-progress {
+            background: #e2edff;
+            color: #2458a6;
+        }
+
+        select {
+            padding: 9px;
+            border: 1px solid #d5e2d7;
+            border-radius: 7px;
+            background: white;
+            margin-bottom: 7px;
+        }
+
+        button {
+            background: #218c4b;
+            color: white;
+            border: none;
+            padding: 9px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #14532d;
+        }
+
+        .delete-button {
+            background: #dc2626;
+            margin-top: 5px;
+        }
+
+        .delete-button:hover {
+            background: #991b1b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #718078;
+        }
+
+        footer {
+            text-align: center;
+            background: #153d27;
+            color: #d5e8da;
+            padding: 22px;
+            font-size: 13px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar h2 {
+                font-size: 18px;
+            }
+
+            .heading h1 {
+                font-size: 25px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .nav-actions {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2>🌿 Local Problem Reporter</h2>
+
+        <div class="nav-actions">
+            <a href="/">⌂ Home</a>
+
+            <form action="{{ url_for('admin_logout') }}" method="POST"
+                onsubmit="return confirm('Are you sure you want to logout?');">
+
+                <button type="submit" class="logout-button">
+                    🚪 Logout
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <div class="heading">
+            <h1>Admin Dashboard 📊</h1>
+            <p>Manage community reports and identify the people who submitted them.</p>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <span>📋 Total Reports</span>
+                <h2>{{ reports|length }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>🟠 Pending</span>
+                <h2>{{ reports|selectattr('status', 'equalto', 'Pending')|list|length }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>🔵 In Progress</span>
+                <h2>{{ reports|selectattr('status', 'equalto', 'In Progress')|list|length }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>🟢 Resolved</span>
+                <h2>{{ reports|selectattr('status', 'equalto', 'Resolved')|list|length }}</h2>
+            </div>
+
+        </div>
+
+        <section class="section">
+
+            <h2>📝 Manage Reports</h2>
+
+            {% if reports %}
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Reported By</th>
+                            <th>Mobile Number</th>
+                            <th>Photo</th>
+                            <th>Problem</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for report in reports %}
+
+                        <tr>
+
+                            <td>#{{ report['id'] }}</td>
+
+                            <td>
+                                {% if report['reporter_name'] %}
+                                <span class="reporter-name">
+                                    {{ report['reporter_name'] }}
+                                </span>
+                                {% else %}
+                                <span class="not-available">
+                                    Not available
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <td class="reporter-mobile">
+                                {% if report['reporter_mobile'] %}
+                                {{ report['reporter_mobile'] }}
+                                {% else %}
+                                <span class="not-available">
+                                    Not available
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if report['photo'] %}
+                                <img class="report-photo" src="{{ url_for('static', filename=report['photo']) }}"
+                                    alt="Problem photo">
+                                {% else %}
+                                No photo
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>{{ report['title'] }}</strong>
+                                <br>
+                                <small>{{ report['description'] }}</small>
+                            </td>
+
+                            <td>{{ report['category'] }}</td>
+
+                            <td>{{ report['location'] }}</td>
+
+                            <td>
+                                {% set current_status = report['status']|lower|replace(' ', '-') %}
+
+                                <span
+                                    class="status {% if current_status == 'resolved' %}resolved{% elif current_status == 'in-progress' %}in-progress{% endif %}">
+                                    {{ report['status'] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <form action="{{ url_for('update_status', report_id=report['id']) }}" method="POST">
+
+                                    <select name="status" required>
+
+                                        <option value="Pending" {% if report['status']=='Pending' %}selected{% endif %}>
+                                            Pending
+                                        </option>
+
+                                        <option value="In Progress" {% if report['status']=='In Progress' %}selected{%
+                                            endif %}>
+                                            In Progress
+                                        </option>
+
+                                        <option value="Resolved" {% if report['status']=='Resolved' %}selected{% endif
+                                            %}>
+                                            Resolved
+                                        </option>
+
+                                    </select>
+
+                                    <button type="submit">Save</button>
+
+                                </form>
+                            </td>
+
+                            <td>
+                                <form action="{{ url_for('delete_report', report_id=report['id']) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to permanently delete this report?');">
+
+                                    <button type="submit" class="delete-button">
+                                        🗑️ Delete
+                                    </button>
+
+                                </form>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                <h3>No reports available yet.</h3>
+                <p>Submitted problems will appear here.</p>
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>🌱 Local Problem Reporter | Admin Dashboard</p>
+    </footer>
+
+</body>
+
+</html>
